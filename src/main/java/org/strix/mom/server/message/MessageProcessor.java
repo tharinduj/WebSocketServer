@@ -1,5 +1,10 @@
 package org.strix.mom.server.message;
 
+import org.strix.mom.server.message.api.Message;
+import org.strix.mom.server.message.api.MessageHandler;
+import org.strix.mom.server.message.json.JsonMessage;
+import org.strix.mom.server.message.json.JsonMessageHandler;
+
 /**
  * Created by IntelliJ IDEA.
  * User: SSC1
@@ -8,20 +13,25 @@ package org.strix.mom.server.message;
  * To change this template use File | Settings | File Templates.
  */
 public class MessageProcessor {
-    private static MessageProcessor messageProcessor = new MessageProcessor();
+    private MessageHandler messageHandler = null;
 
-    private MessageProcessor() {
-    }
-
-    public static MessageProcessor getInstance() {
-        return messageProcessor;
+    public MessageProcessor() {
+        messageHandler = new JsonMessageHandler();
     }
 
     /**
      * Process messages from the client
      * @param string
      */
-    public static ProtocolMessage processMessage(String string) {
-        return null;
+    public ServerMessage processMessage(String string) {
+        Message message =  messageHandler.parseMessage(string);
+        ServerMessage serverMessage = new ServerMessage();
+        if(message!=null){
+            System.out.println("message"+message);
+            String jsonResponse = messageHandler.getMessage(message);
+            serverMessage.setSentReply(true);
+            serverMessage.setResponseData(jsonResponse);
+        }
+        return serverMessage;
     }
 }

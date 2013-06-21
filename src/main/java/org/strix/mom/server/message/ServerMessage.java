@@ -7,7 +7,7 @@ package org.strix.mom.server.message;
  * Time: 5:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ProtocolMessage {
+public class ServerMessage {
     private String requestData;
     private boolean sentReply;
     private String channel;

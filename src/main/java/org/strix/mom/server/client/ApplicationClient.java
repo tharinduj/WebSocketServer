@@ -1,10 +1,8 @@
 package org.strix.mom.server.client;
 
 import org.jwebsocket.api.WebSocketConnector;
-import org.jwebsocket.api.WebSocketPacket;
-import org.jwebsocket.kit.RawPacket;
 import org.strix.mom.server.message.MessageProcessor;
-import org.strix.mom.server.message.ProtocolMessage;
+import org.strix.mom.server.message.ServerMessage;
 
 import java.util.Date;
 
@@ -27,6 +25,11 @@ public class ApplicationClient {
     private int remoteHostPort = 0;
     private Date lastMessageReceived = null;
     private WebSocketConnector webSocketConnector = null;
+    private MessageProcessor messageProcessor;
+
+    public ApplicationClient() {
+        messageProcessor = new MessageProcessor();
+    }
 
     public String getUid() {
         return uid;
@@ -117,8 +120,8 @@ public class ApplicationClient {
      * Process messages from the client
      * @param string
      */
-    public ProtocolMessage processMessage(String string) {
-        ProtocolMessage message =  MessageProcessor.processMessage(string);
+    public ServerMessage processMessage(String string) {
+        ServerMessage message =  messageProcessor.processMessage(string);
         return  message;
     }
 }

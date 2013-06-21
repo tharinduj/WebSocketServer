@@ -15,7 +15,7 @@ import org.jwebsocket.listener.WebSocketServerTokenListener;
 import org.jwebsocket.server.TokenServer;
 import org.jwebsocket.token.Token;
 import org.strix.mom.server.client.ApplicationClient;
-import org.strix.mom.server.message.ProtocolMessage;
+import org.strix.mom.server.message.ServerMessage;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -102,13 +102,13 @@ public class WebSocketServer implements WebSocketServerTokenListener {
     public void processPacket(WebSocketServerEvent event, WebSocketPacket packet) {
         System.out.println("packet received " + packet.getString());
         ApplicationClient client = applicationClientManager.getApplicationClient(event.getConnector().getId());
-        System.out.println("Connected clients"+applicationClientManager.getApplicationClients().size());
+//        System.out.println("Connected clients"+applicationClientManager.getApplicationClients().size());
         client.setLastMessageReceived(new Date(System.currentTimeMillis()));
-        System.out.println("Message From " + client);
-        ProtocolMessage replyMessage = client.processMessage(packet.getString());
+//        System.out.println("Message From " + client);
+        ServerMessage replyMessage = client.processMessage(packet.getString());
         if(replyMessage.isSentReply()){
-            String json = "{\"action\":\"slide\",\"uniqueId\":123,\"slideNumber\":" + 1 + "}";
-            WebSocketPacket wsPacket = new RawPacket(json);
+            WebSocketPacket wsPacket = new RawPacket(replyMessage.getResponseData());
+            System.out.println("WebSocketServer.sendpacket"+replyMessage.getResponseData());
             getTokenServer().sendPacket(client.getWebSocketConnector(), wsPacket);
         }
     }
