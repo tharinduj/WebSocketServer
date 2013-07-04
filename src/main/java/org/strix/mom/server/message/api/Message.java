@@ -44,9 +44,9 @@ public interface Message {
 
     void setJwsInfo(String jwsInfo);
 
-    String getEncodingFormats();
+//    String getEncodingFormats();
 
-    void setEncodingFormats(String encodingFormats);
+//    void setEncodingFormats(String encodingFormats);
 
     String getUtid();
 
@@ -79,4 +79,8 @@ public interface Message {
     String getSecretKey();
 
     void setSecretKey(String secretKey);
+
+    String getData();
+
+    void setData(String data);
 }

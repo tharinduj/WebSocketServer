@@ -1,4 +1,4 @@
-/*
+package temp;/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -56,11 +56,11 @@ public class JwebSockClient implements WebSocketServerTokenListener {
     }
 
     public void processToken(WebSocketServerTokenEvent serverTokenEvent, Token token) {
-        //System.out.println("JwebSockClient.processToken"+token);
+        //System.out.println("temp.JwebSockClient.processToken"+token);
     }
 
     public void processClosed(WebSocketServerEvent arg0) {
-        System.out.println("JwebSockClient.processClosed"+arg0);
+        System.out.println("temp.JwebSockClient.processClosed"+arg0);
     }
 
     public void processOpened(WebSocketServerEvent event) {

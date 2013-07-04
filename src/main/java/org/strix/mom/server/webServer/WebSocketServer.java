@@ -62,11 +62,11 @@ public class WebSocketServer implements WebSocketServerTokenListener {
     }
 
     public void processToken(WebSocketServerTokenEvent serverTokenEvent, Token token) {
-//        System.out.println("JwebSockClient.processToken"+token);
+//        System.out.println("temp.JwebSockClient.processToken"+token);
     }
 
     public void processClosed(WebSocketServerEvent event) {
-        System.out.println("JwebSockClient.processClosed"+event);
+        System.out.println("SockServer.processClosed"+event);
         ApplicationClient applicationClient = new ApplicationClient();
         applicationClient.setId(event.getConnector().getId());
         applicationClientManager.removeApplicationClient(applicationClient.getId());
@@ -88,7 +88,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
         applicationClientManager.addApplicationClient(applicationClient);
     }
 
-    public void sendPacket(int slideNumber) {
+    /*public void sendPacket(int slideNumber) {
         Map lConnectorMap = getTokenServer().getAllConnectors();
 
         Collection<WebSocketConnector> lConnectors = lConnectorMap.values();
@@ -97,7 +97,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
             WebSocketPacket wsPacket = new RawPacket(json);
             getTokenServer().sendPacket(wsc, wsPacket);            
         }
-    }
+    }*/
 
     public void processPacket(WebSocketServerEvent event, WebSocketPacket packet) {
         System.out.println("packet received " + packet.getString());
@@ -113,7 +113,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
         }
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         WebSocketServer jc = new WebSocketServer();
         jc.init();
@@ -143,5 +143,5 @@ public class WebSocketServer implements WebSocketServerTokenListener {
                 Logger.getLogger(WebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
+    }*/
 }

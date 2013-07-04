@@ -20,7 +20,7 @@ public class JsonMessage implements Message {
     private String jwsType = null;//"jwsType":"javascript",
     private String jwsVersion = null;//"jwsVersion":"1.0 RC1 (build 30518)",
     private String jwsInfo = null;//"jwsInfo":"native",
-    private String encodingFormats = null;//"encodingFormats":["base64","zipBase64"],
+    //private String encodingFormats = null;//"encodingFormats":["base64","zipBase64"],
     private String utid = null;//"utid":1
     private String username = null;//"username":"root"
     private String password = null;//"password":"root"
@@ -29,6 +29,7 @@ public class JsonMessage implements Message {
     private String accessKey = null;//"accessKey":"5l1d35h0w"
     private String secretKey = null;//"secretKey":"5l1d35h0w53cr3t!"
     private String pool = null;//"pool":null
+    private String data = null;//"data":"test"
 
     @Override
     public String getNs() {
@@ -120,7 +121,7 @@ public class JsonMessage implements Message {
         this.jwsInfo = jwsInfo;
     }
 
-    @Override
+    /*@Override
     public String getEncodingFormats() {
         return encodingFormats;
     }
@@ -128,7 +129,7 @@ public class JsonMessage implements Message {
     @Override
     public void setEncodingFormats(String encodingFormats) {
         this.encodingFormats = encodingFormats;
-    }
+    }*/
 
     @Override
     public String getUtid() {
@@ -208,5 +209,15 @@ public class JsonMessage implements Message {
     @Override
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    @Override
+    public String getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(String data) {
+        this.data = data;
     }
 }
