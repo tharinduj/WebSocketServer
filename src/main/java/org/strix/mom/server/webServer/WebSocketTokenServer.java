@@ -3,7 +3,6 @@ package org.strix.mom.server.webServer;/*
  * and open the template in the editor.
  */
 
-import org.jwebsocket.api.WebSocketConnector;
 import org.jwebsocket.api.WebSocketPacket;
 import org.jwebsocket.config.JWebSocketConfig;
 import org.jwebsocket.config.JWebSocketServerConstants;
@@ -16,19 +15,24 @@ import org.jwebsocket.server.TokenServer;
 import org.jwebsocket.token.Token;
 import org.strix.mom.server.client.ApplicationClient;
 import org.strix.mom.server.message.ServerMessage;
+import org.strix.mom.server.message.file.FileHandler;
+import org.strix.mom.server.sever.impl.UdpServer;
 
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.DatagramPacket;
+import java.util.Date;
+
 
 /**
- *
  * @author tharinduj
  */
-public class WebSocketServer implements WebSocketServerTokenListener {
-
+public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpServer.Listener, PropertyChangeListener {
+    private String resourcePath;
     private TokenServer tokenServer;
+    private FileHandler fileHandler;
     ApplicationClientManager applicationClientManager;
+
     public TokenServer getTokenServer() {
 
         return tokenServer;
@@ -40,7 +44,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
 //                    System.getenv(JWebSocketServerConstants.JWEBSOCKET_HOME));
 
             System.setProperty(JWebSocketServerConstants.JWEBSOCKET_HOME,
-                    "G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\src\\main\\resources");
+                    resourcePath);
 
             //JWebSocketFactory.printCopyrightToConsole();
             // the following line must not be removed due to GNU LGPL 3.0 license!
@@ -50,7 +54,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
             JWebSocketFactory.start();
             tokenServer = (TokenServer) JWebSocketFactory.getServer("ts0");
             if (tokenServer != null) {
-                System.out.println("server was found");
+                System.out.println("Web Socket server was created");
                 tokenServer.addListener(this);
             } else {
                 System.out.println("server was NOT found");
@@ -66,7 +70,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
     }
 
     public void processClosed(WebSocketServerEvent event) {
-        System.out.println("SockServer.processClosed"+event);
+        System.out.println("SockServer.processClosed" + event);
         ApplicationClient applicationClient = new ApplicationClient();
         applicationClient.setId(event.getConnector().getId());
         applicationClientManager.removeApplicationClient(applicationClient.getId());
@@ -79,7 +83,7 @@ public class WebSocketServer implements WebSocketServerTokenListener {
         ApplicationClient applicationClient = new ApplicationClient();
         applicationClient.setUid(event.getConnector().generateUID());
         applicationClient.setId(event.getConnector().getId());
-        applicationClient.setStatus(event.getConnector().getStatus().getStatus());
+//        applicationClient.setStatus(event.getConnector().getStatus().getStatus());
         applicationClient.setAlive(event.getConnector().getEngine().isAlive());
         applicationClient.setUserName(event.getConnector().getUsername());
         applicationClient.setRemoteHostName(event.getConnector().getRemoteHost().toString());
@@ -106,16 +110,82 @@ public class WebSocketServer implements WebSocketServerTokenListener {
         client.setLastMessageReceived(new Date(System.currentTimeMillis()));
 //        System.out.println("Message From " + client);
         ServerMessage replyMessage = client.processMessage(packet.getString());
-        if(replyMessage.isSentReply()){
+        if (replyMessage.isSentReply()) {
             WebSocketPacket wsPacket = new RawPacket(replyMessage.getResponseData());
-            System.out.println("WebSocketServer.sendpacket"+replyMessage.getResponseData());
+            System.out.println("WebSocketTokenServer.sendpacket" + replyMessage.getResponseData());
             getTokenServer().sendPacket(client.getWebSocketConnector(), wsPacket);
+        }
+    }
+
+    @Override
+    public void packetReceived(UdpServer.Event evt) {
+        DatagramPacket packet = evt.getUdpServer().getPacket(); // Not actually using this here.
+        final String message = evt.getPacketAsString();
+        //System.out.println(evt.getUdpServer().getType() + "UdpServer.Event " + message);
+
+        switch (evt.getUdpServer().getType()){
+            case FILE:
+                fileHandler.processFrame(evt);
+                break;
+            case STREAM:
+
+                break;
+            case TEXT:
+
+                break;
+            case COMMANDS:
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final String prop = evt.getPropertyName();
+        final Object oldVal = evt.getOldValue();
+        final Object newVal = evt.getNewValue();
+//        System.out.println("Property: " + prop + ", Old: " + oldVal + ", New: " + newVal );
+
+        if (UdpServer.STATE_PROP.equals(prop)) {
+            final UdpServer.State state = (UdpServer.State) newVal;
+            switch (state) {
+                case STARTING:
+//                                    stateLabel.setText("Starting");
+//                                    startStopButton.setEnabled(false);
+                    break;
+                case STARTED:
+//                                    stateLabel.setText("Started");
+//                                    startStopButton.setText("Stop");
+//                                    startStopButton.setEnabled(true);
+                    break;
+                case STOPPING:
+//                                    stateLabel.setText("Stopping");
+//                                    startStopButton.setEnabled(false);
+                    break;
+                case STOPPED:
+//                                    stateLabel.setText("Stopped");
+//                                    startStopButton.setText("Start");
+//                                    startStopButton.setEnabled(true);
+                    break;
+                default:
+                    assert false : state;
+                    break;
+            }   // end switch
+        }
+
+        if (UdpServer.PORT_PROP.equals(evt.getPropertyName())) {
+
+
+        } else if (UdpServer.GROUPS_PROP.equals(evt.getPropertyName())) {
+
         }
     }
 
     /*public static void main(String[] args) {
 
-        WebSocketServer jc = new WebSocketServer();
+        WebSocketTokenServer jc = new WebSocketTokenServer();
         jc.init();
         for (int i = 0; i < 30; i++) {
             try {
@@ -140,8 +210,24 @@ public class WebSocketServer implements WebSocketServerTokenListener {
 
                 jc.sendPacket(i % 5 + 1);
             } catch (InterruptedException ex) {
-                Logger.getLogger(WebSocketServer.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WebSocketTokenServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }*/
+
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
+
+    public FileHandler getFileHandler() {
+        return fileHandler;
+    }
+
+    public void setFileHandler(FileHandler fileHandler) {
+        this.fileHandler = fileHandler;
+    }
 }

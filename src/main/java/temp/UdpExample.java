@@ -2,17 +2,14 @@ package temp;
 
 
 import org.strix.mom.server.sever.impl.UdpServer;
-import temp.IndicatorLabel;
 
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.DatagramPacket;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 
 

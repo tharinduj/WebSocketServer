@@ -5,7 +5,6 @@ package temp;/*
 
 import org.jwebsocket.api.WebSocketConnector;
 import org.jwebsocket.api.WebSocketPacket;
-import org.jwebsocket.config.JWebSocketConfig;
 import org.jwebsocket.config.JWebSocketServerConstants;
 import org.jwebsocket.factory.JWebSocketFactory;
 import org.jwebsocket.kit.RawPacket;
@@ -36,10 +35,10 @@ public class JwebSockClient implements WebSocketServerTokenListener {
             System.setProperty(JWebSocketServerConstants.JWEBSOCKET_HOME,
                     System.getenv(JWebSocketServerConstants.JWEBSOCKET_HOME));
 
-            JWebSocketFactory.printCopyrightToConsole();
+//            JWebSocketFactory.printCopyrightToConsole();
             // the following line must not be removed due to GNU LGPL 3.0 license!
 // check if home, config or bootstrap path are passed by command line
-            JWebSocketConfig.initForConsoleApp(null);
+//            JWebSocketConfig.initForConsoleApp(null);
 //start the jWebSocket Server
             JWebSocketFactory.start();
             tokenServer = (TokenServer) JWebSocketFactory.getServer("ts0");

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="momServer"
+          class="org.strix.mom.server.MomServer">
+        <property name="webSocketTokenServer" ref="webSocketTokenServer"/>
+        <property name="udpServerList" ref="udpServerList"/>
+    </bean>
+
+    <bean id="webSocketTokenServer"
+          class="org.strix.mom.server.webServer.WebSocketTokenServer">
+        <property name="resourcePath" value="src/main/resources"/>
+        <property name="fileHandler" ref="fileHandler"/>
+    </bean>
+
+    <bean id="udpServerList" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="udpServer1"/>
+                <ref bean="udpServer2"/>
+                <ref bean="udpServer3"/>
+                <ref bean="udpServer4"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="udpServer1" class="org.strix.mom.server.sever.impl.UdpServer">
+        <constructor-arg value="8000"/>
+        <property name="type" value="TEXT"/>
+    </bean>
+    <bean id="udpServer2" class="org.strix.mom.server.sever.impl.UdpServer">
+        <constructor-arg value="8001"/>
+        <property name="type" value="COMMANDS"/>
+    </bean>
+    <bean id="udpServer3" class="org.strix.mom.server.sever.impl.UdpServer">
+        <constructor-arg value="8002"/>
+        <property name="type" value="STREAM"/>
+    </bean>
+    <bean id="udpServer4" class="org.strix.mom.server.sever.impl.UdpServer">
+        <constructor-arg value="8003"/>
+        <property name="type" value="FILE"/>
+    </bean>
+    <bean id="fileHandler" class="org.strix.mom.server.message.file.FileHandler">
+            <property name="outputLocation" value="target/out/"/>
+    </bean>
+
+</beans>

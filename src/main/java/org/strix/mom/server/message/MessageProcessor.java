@@ -2,7 +2,6 @@ package org.strix.mom.server.message;
 
 import org.strix.mom.server.message.api.Message;
 import org.strix.mom.server.message.api.MessageHandler;
-import org.strix.mom.server.message.json.JsonMessage;
 import org.strix.mom.server.message.json.JsonMessageHandler;
 
 /**

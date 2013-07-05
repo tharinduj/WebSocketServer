@@ -1,18 +1,18 @@
 package org.strix.mom.server.sever.impl;
 
 import java.beans.PropertyChangeEvent;
-import java.util.concurrent.ThreadFactory;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.net.MulticastSocket;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.concurrent.ThreadFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -58,9 +58,7 @@ public class UdpServer {
      */
     public static enum State {
         STARTING, STARTED, STOPPING, STOPPED
-    }
-
-    ;
+    };
     private State currentState = State.STOPPED;
     public final static String STATE_PROP = "state";
 
@@ -78,6 +76,22 @@ public class UdpServer {
 
     public final static String LAST_EXCEPTION_PROP = "lastException";
     private Throwable lastException;
+
+
+    /**
+     * <p>One of four possible types for the server to be in:</p>
+     * <p/>
+     * <ul>
+     * <li>STREAM</li>
+     * <li>FILE</li>
+     * <li>COMMANDS</li>
+     * <li>TEXT</li>
+     * </ul>
+     */
+    public static enum Type {
+        STREAM, FILE, COMMANDS, TEXT
+    };
+    private Type type = Type.TEXT;
 
 /* ********  C O N S T R U C T O R S  ******** */
 
@@ -599,8 +613,15 @@ public class UdpServer {
         return LOGGER.getLevel();
     }
 
+    public Type getType() {
+        return type;
+    }
 
-/* ********                                                          ******** */
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    /* ********                                                          ******** */
 /* ********                                                          ******** */
 /* ********   S T A T I C   I N N E R   C L A S S   L I S T E N E R  ******** */
 /* ********                                                          ******** */

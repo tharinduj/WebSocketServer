@@ -1,7 +1,5 @@
 package org.strix.mom.server.message.api;
 
-import org.strix.mom.server.message.json.JsonMessage;
-
 /**
  * Created by IntelliJ IDEA.
  * User: SSC1

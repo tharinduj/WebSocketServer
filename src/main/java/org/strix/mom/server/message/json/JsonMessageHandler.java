@@ -25,7 +25,7 @@ public class JsonMessageHandler implements MessageHandler {
         try {
             request = gson.fromJson(string, JsonMessage.class);
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return request;
     }
