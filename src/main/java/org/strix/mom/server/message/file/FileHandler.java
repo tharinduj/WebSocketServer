@@ -5,7 +5,7 @@ import org.strix.mom.server.sever.impl.UdpServer;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.nio.channels.FileLock;
+import java.util.HashMap;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +14,7 @@ import java.nio.channels.FileLock;
  * Time: 4:10 PM
  */
 public class FileHandler {
-
+    private HashMap<String,FileEvent> fileEventHashMap = new HashMap<String, FileEvent>();
     private String outputLocation;
 
     public void processFrame(UdpServer.Event evt) {
@@ -52,22 +52,36 @@ public class FileHandler {
         }
         File dstFile = new File(outputFile);
         if(fileEvent.getStart()==0) {
+            byte[] totalFileData = new byte[(int) fileEvent.getFileSize()];
             if (dstFile.exists()) {
                 dstFile.delete();
             }
+            fileEvent.setData(totalFileData);
+            fileEventHashMap.put(outputFile,fileEvent);
         }
         try {
             /*if (!dstFile.exists()) {
                 dstFile.createNewFile();
             }*/
-            System.out.println("+++++++++++"+fileEvent.getStart()+":::::::::::::::"+fileEvent.getEnd());
-            RandomAccessFile randomAccessFile = new RandomAccessFile(dstFile, "rw");
-            randomAccessFile.seek(fileEvent.getFileSize());
-            randomAccessFile.write(fileEvent.getFileData(),(int)fileEvent.getStart(), (int) fileEvent.getBufferSize());
-            randomAccessFile.close();
+            FileEvent cachedFileEvent = fileEventHashMap.get(outputFile);
+            cachedFileEvent.setMessageCount(cachedFileEvent.getMessageCount()+1);
+            System.out.println("+++++++++++"+fileEvent.getStart()+":::::::::::::::"+fileEvent.getEnd()+"cachedFileEvent.getMessageCount():::::::"+cachedFileEvent.getMessageCount());
+            byte[] totalFileDate = cachedFileEvent.getData();
+            for (int i = (int) fileEvent.getStart(); i < fileEvent.getEnd(); i++) {
+                // System.out.println("i: "+i +"   i-(int) fileEvent.getStart():   "+(i-(int) fileEvent.getStart()));
+//                System.out.print((char)fileEvent.getFileData()[i-(int) fileEvent.getStart()]);
+                totalFileDate[i] = fileEvent.getFileData()[i-(int) fileEvent.getStart()];
+            }
+            if(fileEvent.isLast()){
+                FileOutputStream fileOuputStream =
+                        new FileOutputStream(dstFile);
+                fileOuputStream.write(totalFileDate);
+                fileOuputStream.close();
+                fileEventHashMap.remove(outputFile);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

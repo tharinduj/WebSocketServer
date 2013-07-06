@@ -43,7 +43,7 @@
         <property name="type" value="FILE"/>
     </bean>
     <bean id="fileHandler" class="org.strix.mom.server.message.file.FileHandler">
-            <property name="outputLocation" value="target/out/"/>
+            <property name="outputLocation" value="testData/out"/>
     </bean>
 
 </beans>

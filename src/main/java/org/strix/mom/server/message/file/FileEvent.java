@@ -19,6 +19,8 @@ public class FileEvent implements Serializable {
     private long start;
     private long end;
     private long bufferSize;
+    private byte[] data;
+    private int messageCount =0;
 
     public String getDestinationDirectory() {
         return destinationDirectory;
@@ -98,5 +100,21 @@ public class FileEvent implements Serializable {
 
     public void setBufferSize(long bufferSize) {
         this.bufferSize = bufferSize;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public int getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(int messageCount) {
+        this.messageCount = messageCount;
     }
 }

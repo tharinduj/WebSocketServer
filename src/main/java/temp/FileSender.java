@@ -1,7 +1,6 @@
 package temp;
 
 import org.strix.mom.server.message.file.FileEvent;
-import org.strix.mom.server.sever.impl.UdpServer;
 
 import java.io.*;
 import java.net.*;
@@ -9,7 +8,7 @@ import java.net.*;
 public class FileSender {
     private DatagramSocket socket = null;
     private FileEvent event = null;
-    private String sourceFilePath = "G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\lib\\aa.txt";
+    private String sourceFilePath = "G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\testData\\in\\1.jar";
     private String destinationPath = "C:/Downloads/udp/";
     private String hostName = "localHost";
 
@@ -27,15 +26,15 @@ public class FileSender {
             byte[] fileData = event.getFileData();
             System.out.println("FileSender.createConnection"+fileData.length);
             event.setFileData(null);
-            for (int i = 0; i < fileData.length;i++ ) {
+            int noPacketsSend = 0;
+            for (int i = 0; i < event.getFileSize(); ) {
                 byte[] buffer = new byte[1024];
                 event.setStart(i);
                 event.setBufferSize(buffer.length);
-                if(i+buffer.length>fileData.length){
-
+                if(i+buffer.length>event.getFileSize()){
                     System.arraycopy(fileData,i,buffer,0,fileData.length-i);
                     event.setLast(true);
-                    event.setEnd(fileData.length-1);
+                    event.setEnd(fileData.length);
                 }else{
                     System.arraycopy(fileData,i,buffer,0,buffer.length);
                     event.setEnd(i+buffer.length);
@@ -48,11 +47,12 @@ public class FileSender {
                 os.writeObject(event);
                 byte[] data = outputStream.toByteArray();
                 DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 8003);
-                //processFrame(sendPacket,data);
                 socket.send(sendPacket);
+                noPacketsSend++;
+                Thread.sleep(10);
             }
-            Thread.sleep(17000);
-            System.out.println("File sent from client");
+            Thread.sleep(1000);
+            System.out.println("File sent from client with "+noPacketsSend);
             DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
             socket.receive(incomingPacket);
             String response = new String(incomingPacket.getData());
@@ -105,52 +105,6 @@ public class FileSender {
         return fileEvent;
     }
 
-    public void processFrame(DatagramPacket packet, byte[] data ) {
-        ByteArrayInputStream in = new ByteArrayInputStream(data);
-        ObjectInputStream is = null;
-        try {
-            is = new ObjectInputStream(in);
-
-            FileEvent fileEvent = (FileEvent) is.readObject();
-            if (fileEvent.getStatus().equalsIgnoreCase("Error")) {
-                System.out.println("Some issue happened while packing the data @ client side");
-                System.exit(0);
-            }
-            createAndWriteFile(fileEvent);   // writing the file to hard disk
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private synchronized void createAndWriteFile(FileEvent fileEvent) {
-        String outputLocation = "target/out1/";
-        String outputFile = outputLocation+"\\" + fileEvent.getFilename();
-        if (!new File(outputLocation).exists()) {
-            new File(outputLocation).mkdirs();
-        }
-        File dstFile = new File(outputFile);
-        if(fileEvent.getStart()==0) {
-            if (dstFile.exists()) {
-                dstFile.delete();
-            }
-        }
-        try {
-            /*if (!dstFile.exists()) {
-                dstFile.createNewFile();
-            }*/
-            System.out.println(((int) fileEvent.getEnd()-(int)fileEvent.getStart())+"+++++++++++"+fileEvent.getStart()+":::::::::::::::"+fileEvent.getEnd());
-            RandomAccessFile randomAccessFile = new RandomAccessFile(dstFile, "rw");
-            randomAccessFile.seek(fileEvent.getFileSize());
-            randomAccessFile.write(fileEvent.getFileData(),(int)fileEvent.getStart(), (int) fileEvent.getEnd()-(int)fileEvent.getStart());
-            randomAccessFile.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void main(String[] args) {
         FileSender client = new FileSender();
