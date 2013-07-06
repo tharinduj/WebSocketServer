@@ -31,13 +31,15 @@ public class FileHandler {
                 System.exit(0);
             }
             createAndWriteFile(fileEvent);   // writing the file to hard disk
-            InetAddress IPAddress = packet.getAddress();
-            int port = packet.getPort();
-            String reply = "Thank you for the message";
-            byte[] replyBytea = reply.getBytes();
-            DatagramPacket replyPacket =
-                    new DatagramPacket(replyBytea, replyBytea.length, IPAddress, port);
-            evt.getUdpServer().send(replyPacket);
+            if (fileEvent.isLast()) {
+                InetAddress IPAddress = packet.getAddress();
+                int port = packet.getPort();
+                String reply = "Thank you for the message";
+                byte[] replyBytea = reply.getBytes();
+                DatagramPacket replyPacket =
+                        new DatagramPacket(replyBytea, replyBytea.length, IPAddress, port);
+                evt.getUdpServer().send(replyPacket);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -64,14 +66,15 @@ public class FileHandler {
                 dstFile.createNewFile();
             }*/
             FileEvent cachedFileEvent = fileEventHashMap.get(outputFile);
-            cachedFileEvent.setMessageCount(cachedFileEvent.getMessageCount()+1);
-            System.out.println("+++++++++++"+fileEvent.getStart()+":::::::::::::::"+fileEvent.getEnd()+"cachedFileEvent.getMessageCount():::::::"+cachedFileEvent.getMessageCount());
+            cachedFileEvent.setMessageCount(cachedFileEvent.getMessageCount() + 1);
+            System.out.println("+++++++++++" + fileEvent.getStart() + ":::::::::::::::" + fileEvent.getEnd() + "cachedFileEvent.getMessageCount():::::::" + cachedFileEvent.getMessageCount());
             byte[] totalFileDate = cachedFileEvent.getData();
-            for (int i = (int) fileEvent.getStart(); i < fileEvent.getEnd(); i++) {
+            /*for (int i = (int) fileEvent.getStart(); i < fileEvent.getEnd(); i++) {
                 // System.out.println("i: "+i +"   i-(int) fileEvent.getStart():   "+(i-(int) fileEvent.getStart()));
-//                System.out.print((char)fileEvent.getFileData()[i-(int) fileEvent.getStart()]);
+                //System.out.print((char)fileEvent.getFileData()[i-(int) fileEvent.getStart()]);
                 totalFileDate[i] = fileEvent.getFileData()[i-(int) fileEvent.getStart()];
-            }
+            }*/
+            System.arraycopy(fileEvent.getFileData(),0,totalFileDate,(int) fileEvent.getStart(), (int) (fileEvent.getEnd()-fileEvent.getStart()));
             if(fileEvent.isLast()){
                 FileOutputStream fileOuputStream =
                         new FileOutputStream(dstFile);

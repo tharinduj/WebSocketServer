@@ -8,7 +8,7 @@ import java.net.*;
 public class FileSender {
     private DatagramSocket socket = null;
     private FileEvent event = null;
-    private String sourceFilePath = "G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\testData\\in\\1.jar";
+    private String sourceFilePath = "G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\testData\\in\\1.avi";
     private String destinationPath = "C:/Downloads/udp/";
     private String hostName = "localHost";
 
@@ -38,6 +38,9 @@ public class FileSender {
                 }else{
                     System.arraycopy(fileData,i,buffer,0,buffer.length);
                     event.setEnd(i+buffer.length);
+                    if(i+buffer.length==event.getFileSize()){
+                        event.setLast(true);
+                    }
                 }
                 i=i+buffer.length;
                 event.setFileData(buffer);
@@ -51,7 +54,7 @@ public class FileSender {
                 noPacketsSend++;
                 Thread.sleep(10);
             }
-            Thread.sleep(1000);
+            Thread.sleep(50000);
             System.out.println("File sent from client with "+noPacketsSend);
             DatagramPacket incomingPacket = new DatagramPacket(incomingData, incomingData.length);
             socket.receive(incomingPacket);
