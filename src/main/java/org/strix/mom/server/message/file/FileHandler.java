@@ -1,6 +1,6 @@
 package org.strix.mom.server.message.file;
 
-import org.strix.mom.server.sever.impl.UdpServer;
+import org.strix.mom.server.communication.impl.UdpServer;
 
 import java.io.*;
 import java.net.DatagramPacket;

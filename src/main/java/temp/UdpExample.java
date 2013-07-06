@@ -1,7 +1,7 @@
 package temp;
 
 
-import org.strix.mom.server.sever.impl.UdpServer;
+import org.strix.mom.server.communication.impl.UdpServer;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;

@@ -1,4 +1,4 @@
-package org.strix.mom.server.sever.impl;
+package org.strix.mom.server.communication.impl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

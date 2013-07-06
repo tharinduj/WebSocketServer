@@ -26,6 +26,10 @@ public class MessageProcessor {
         Message message =  messageHandler.parseMessage(string);
         ServerMessage serverMessage = new ServerMessage();
         if(message!=null){
+
+            if(message.getType()!=null && message.getType().equalsIgnoreCase("getDirectoryListing")){
+
+            }
             System.out.println("message"+message);
             String jsonResponse = messageHandler.getMessage(message);
             serverMessage.setSentReply(true);

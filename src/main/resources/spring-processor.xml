@@ -14,6 +14,7 @@
           class="org.strix.mom.server.webServer.WebSocketTokenServer">
         <property name="resourcePath" value="src/main/resources"/>
         <property name="fileHandler" ref="fileHandler"/>
+        <property name="applicationClientManager" ref="applicationClientManager"/>
     </bean>
 
     <bean id="udpServerList" class="java.util.ArrayList">
@@ -26,24 +27,25 @@
             </list>
         </constructor-arg>
     </bean>
-    <bean id="udpServer1" class="org.strix.mom.server.sever.impl.UdpServer">
+    <bean id="udpServer1" class="org.strix.mom.server.communication.impl.UdpServer">
         <constructor-arg value="8000"/>
         <property name="type" value="TEXT"/>
     </bean>
-    <bean id="udpServer2" class="org.strix.mom.server.sever.impl.UdpServer">
+    <bean id="udpServer2" class="org.strix.mom.server.communication.impl.UdpServer">
         <constructor-arg value="8001"/>
         <property name="type" value="COMMANDS"/>
     </bean>
-    <bean id="udpServer3" class="org.strix.mom.server.sever.impl.UdpServer">
+    <bean id="udpServer3" class="org.strix.mom.server.communication.impl.UdpServer">
         <constructor-arg value="8002"/>
         <property name="type" value="STREAM"/>
     </bean>
-    <bean id="udpServer4" class="org.strix.mom.server.sever.impl.UdpServer">
+    <bean id="udpServer4" class="org.strix.mom.server.communication.impl.UdpServer">
         <constructor-arg value="8003"/>
         <property name="type" value="FILE"/>
     </bean>
     <bean id="fileHandler" class="org.strix.mom.server.message.file.FileHandler">
             <property name="outputLocation" value="testData/out"/>
     </bean>
+    <bean id="applicationClientManager" class="org.strix.mom.server.webServer.ApplicationClientManager" factory-method="getInstance"/>
 
 </beans>

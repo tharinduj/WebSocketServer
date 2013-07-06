@@ -2,7 +2,7 @@ package org.strix.mom.server;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.strix.mom.server.sever.impl.UdpServer;
+import org.strix.mom.server.communication.impl.UdpServer;
 import org.strix.mom.server.webServer.WebSocketTokenServer;
 
 import java.util.List;

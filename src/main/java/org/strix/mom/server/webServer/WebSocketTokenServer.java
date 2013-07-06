@@ -16,7 +16,7 @@ import org.jwebsocket.token.Token;
 import org.strix.mom.server.client.ApplicationClient;
 import org.strix.mom.server.message.ServerMessage;
 import org.strix.mom.server.message.file.FileHandler;
-import org.strix.mom.server.sever.impl.UdpServer;
+import org.strix.mom.server.communication.impl.UdpServer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,7 +31,7 @@ public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpSe
     private String resourcePath;
     private TokenServer tokenServer;
     private FileHandler fileHandler;
-    ApplicationClientManager applicationClientManager;
+    private ApplicationClientManager applicationClientManager;
 
     public TokenServer getTokenServer() {
 
@@ -59,7 +59,6 @@ public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpSe
             } else {
                 System.out.println("server was NOT found");
             }
-            applicationClientManager = ApplicationClientManager.getInstance();
         } catch (Exception lEx) {
             lEx.printStackTrace();
         }
@@ -229,5 +228,13 @@ public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpSe
 
     public void setFileHandler(FileHandler fileHandler) {
         this.fileHandler = fileHandler;
+    }
+
+    public ApplicationClientManager getApplicationClientManager() {
+        return applicationClientManager;
+    }
+
+    public void setApplicationClientManager(ApplicationClientManager applicationClientManager) {
+        this.applicationClientManager = applicationClientManager;
     }
 }
