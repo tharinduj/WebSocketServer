@@ -97,4 +97,11 @@ public class FileHandler {
     public void setOutputLocation(String outputLocation) {
         this.outputLocation = outputLocation;
     }
+
+    public String getDirectoryListing() {
+        return "<video width=\"320\" height=\"240\" controls>\n" +
+                "  <source src=\"file:///G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/out/1.mp4\" type=\"video/mp4\">\n" +
+                "Your browser does not support the video tag.\n" +
+                "</video>";
+    }
 }

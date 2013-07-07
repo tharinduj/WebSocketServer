@@ -83,4 +83,9 @@ public interface Message {
     String getData();
 
     void setData(String data);
+
+    String getAction();
+    
+    void setAction(String action);
+    
 }

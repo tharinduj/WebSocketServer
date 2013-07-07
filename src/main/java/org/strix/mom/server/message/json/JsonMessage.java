@@ -30,6 +30,7 @@ public class JsonMessage implements Message {
     private String secretKey = null;//"secretKey":"5l1d35h0w53cr3t!"
     private String pool = null;//"pool":null
     private String data = null;//"data":"test"
+    private String action = null;//"action":"test"
 
     @Override
     public String getNs() {
@@ -219,5 +220,15 @@ public class JsonMessage implements Message {
     @Override
     public void setData(String data) {
         this.data = data;
+    }
+
+    @Override
+    public String getAction() {
+        return action;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setAction(String action) {
+        this.action = action;
     }
 }

@@ -2,6 +2,7 @@ package org.strix.mom.server.message;
 
 import org.strix.mom.server.message.api.Message;
 import org.strix.mom.server.message.api.MessageHandler;
+import org.strix.mom.server.message.file.FileHandler;
 import org.strix.mom.server.message.json.JsonMessageHandler;
 
 /**
@@ -13,9 +14,11 @@ import org.strix.mom.server.message.json.JsonMessageHandler;
  */
 public class MessageProcessor {
     private MessageHandler messageHandler = null;
+    private FileHandler fileHandler = null;
 
     public MessageProcessor() {
         messageHandler = new JsonMessageHandler();
+        fileHandler = new FileHandler();
     }
 
     /**
@@ -28,7 +31,8 @@ public class MessageProcessor {
         if(message!=null){
 
             if(message.getType()!=null && message.getType().equalsIgnoreCase("getDirectoryListing")){
-
+                message.setData(fileHandler.getDirectoryListing());
+                message.setAction("getDirectoryListing");
             }
             System.out.println("message"+message);
             String jsonResponse = messageHandler.getMessage(message);
