@@ -12,9 +12,11 @@
 
     <bean id="webSocketTokenServer"
           class="org.strix.mom.server.webServer.WebSocketTokenServer">
-        <property name="resourcePath" value="src/main/resources"/>
+        <!--<property name="resourcePath" value="src/main/resources"/>-->
+        <property name="resourcePath" value=""/>
         <property name="fileHandler" ref="fileHandler"/>
         <property name="applicationClientManager" ref="applicationClientManager"/>
+        <property name="messageProcessor" ref="messageProcessor"/>
     </bean>
 
     <bean id="udpServerList" class="java.util.ArrayList">
@@ -44,8 +46,18 @@
         <property name="type" value="FILE"/>
     </bean>
     <bean id="fileHandler" class="org.strix.mom.server.message.file.FileHandler">
-            <property name="outputLocation" value="testData/out"/>
+            <property name="outputLocation" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/out"/>
     </bean>
     <bean id="applicationClientManager" class="org.strix.mom.server.webServer.ApplicationClientManager" factory-method="getInstance"/>
 
+    <bean id="messageProcessor" class="org.strix.mom.server.message.MessageProcessor">
+        <property name="fileHandler" ref="fileHandler"/>
+        <property name="messageHandler" ref="messageHandler"/>
+    </bean>
+    <bean id="messageHandler" class="org.strix.mom.server.message.json.JsonMessageHandler"/>
+
+    <bean id="fileSender" class="temp.FileSender">
+        <property name="sourceFilePath" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/in/1.jpg"/>
+        <property name="port" value="8003"/>
+    </bean>
 </beans>

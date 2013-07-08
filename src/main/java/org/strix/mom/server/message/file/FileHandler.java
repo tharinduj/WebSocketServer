@@ -5,7 +5,9 @@ import org.strix.mom.server.communication.impl.UdpServer;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -99,9 +101,51 @@ public class FileHandler {
     }
 
     public String getDirectoryListing() {
-        return "<video width=\"320\" height=\"240\" controls>\n" +
-                "  <source src=\"file:///G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/out/1.mp4\" type=\"video/mp4\">\n" +
-                "Your browser does not support the video tag.\n" +
-                "</video>";
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbTable = new StringBuilder();
+        List<String> files = doDir(outputLocation);
+
+        
+
+        for(String file : files){
+            if (file.endsWith((".mp4"))) {
+                String videoHtml= "<video width=\"320\" height=\"240\" controls>\n" +
+                        "  <source src=\"file:///"+outputLocation+"/"+file+"\" type=\"video/mp4\">\n" +
+                        "Your browser does not support the video tag.\n" +
+                        "</video>";
+                sb.append("  <tr>\n" +
+                        "    <td>"+videoHtml+"</td>\n" +
+                        "  </tr>\n");
+
+            }else if (file.endsWith((".mp3"))) {
+                String audioHtml= "<audio width=\"320\" height=\"240\" controls>\n" +
+                        "  <source src=\"file:///"+outputLocation+"/"+file+"\" type=\"audio/mp3\">\n" +
+                        "Your browser does not support the video tag.\n" +
+                        "</audio>";
+                sb.append("  <tr>\n" +
+                        "    <td>"+audioHtml+"</td>\n" +
+                        "  </tr>\n");
+
+            } else{
+                String linkHtml =  "<a href=\"file:///"+outputLocation+"/"+file+"\">"+file+"</a>";
+                sb.append("  <tr>\n" +
+                        "    <td>"+linkHtml+"</td>\n" +
+                        "  </tr>\n");
+            }
+        }
+
+        sbTable.append("<table border=\"0\">\n" + sb.toString()+"</table>");
+        return sbTable.toString();
+    }
+
+    private List<String> doDir(String directory) {
+        List<String> list = new ArrayList<String>();
+        File dir = new File(directory);
+        for (File file : dir.listFiles()) {
+//            if (file.getName().endsWith((".txt"))) {
+                list.add(file.getName());
+//            }
+        }
+        return list;
     }
 }

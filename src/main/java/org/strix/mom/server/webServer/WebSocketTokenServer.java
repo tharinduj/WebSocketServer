@@ -14,6 +14,7 @@ import org.jwebsocket.listener.WebSocketServerTokenListener;
 import org.jwebsocket.server.TokenServer;
 import org.jwebsocket.token.Token;
 import org.strix.mom.server.client.ApplicationClient;
+import org.strix.mom.server.message.MessageProcessor;
 import org.strix.mom.server.message.ServerMessage;
 import org.strix.mom.server.message.file.FileHandler;
 import org.strix.mom.server.communication.impl.UdpServer;
@@ -32,6 +33,7 @@ public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpSe
     private TokenServer tokenServer;
     private FileHandler fileHandler;
     private ApplicationClientManager applicationClientManager;
+    private MessageProcessor messageProcessor;
 
     public TokenServer getTokenServer() {
 
@@ -108,7 +110,7 @@ public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpSe
 //        System.out.println("Connected clients"+applicationClientManager.getApplicationClients().size());
         client.setLastMessageReceived(new Date(System.currentTimeMillis()));
 //        System.out.println("Message From " + client);
-        ServerMessage replyMessage = client.processMessage(packet.getString());
+        ServerMessage replyMessage = messageProcessor.processMessage(packet.getString());
         if (replyMessage.isSentReply()) {
             WebSocketPacket wsPacket = new RawPacket(replyMessage.getResponseData());
             System.out.println("WebSocketTokenServer.sendpacket" + replyMessage.getResponseData());
@@ -236,5 +238,13 @@ public class WebSocketTokenServer implements WebSocketServerTokenListener, UdpSe
 
     public void setApplicationClientManager(ApplicationClientManager applicationClientManager) {
         this.applicationClientManager = applicationClientManager;
+    }
+
+    public MessageProcessor getMessageProcessor() {
+        return messageProcessor;
+    }
+
+    public void setMessageProcessor(MessageProcessor messageProcessor) {
+        this.messageProcessor = messageProcessor;
     }
 }

@@ -16,10 +16,10 @@ public class MessageProcessor {
     private MessageHandler messageHandler = null;
     private FileHandler fileHandler = null;
 
-    public MessageProcessor() {
+    /*public MessageProcessor() {
         messageHandler = new JsonMessageHandler();
         fileHandler = new FileHandler();
-    }
+    }*/
 
     /**
      * Process messages from the client
@@ -40,5 +40,21 @@ public class MessageProcessor {
             serverMessage.setResponseData(jsonResponse);
         }
         return serverMessage;
+    }
+
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
+    }
+
+    public void setMessageHandler(MessageHandler messageHandler) {
+        this.messageHandler = messageHandler;
+    }
+
+    public FileHandler getFileHandler() {
+        return fileHandler;
+    }
+
+    public void setFileHandler(FileHandler fileHandler) {
+        this.fileHandler = fileHandler;
     }
 }

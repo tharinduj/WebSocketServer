@@ -116,12 +116,5 @@ public class ApplicationClient {
                 '}';
     }
 
-    /**
-     * Process messages from the client
-     * @param string
-     */
-    public ServerMessage processMessage(String string) {
-        ServerMessage message =  messageProcessor.processMessage(string);
-        return  message;
-    }
+
 }

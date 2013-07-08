@@ -1,5 +1,7 @@
 package temp;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.strix.mom.server.message.file.FileEvent;
 
 import java.io.*;
@@ -8,10 +10,10 @@ import java.net.*;
 public class FileSender {
     private DatagramSocket socket = null;
     private FileEvent event = null;
-    private String sourceFilePath = "G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\testData\\in\\1.avi";
+    private String sourceFilePath = null;//"G:\\Strix\\MyjWebSocketJavaClient\\WebSocketServer\\testData\\in\\1.avi";
     private String destinationPath = "C:/Downloads/udp/";
     private String hostName = "localHost";
-
+    private int port;
 
     public FileSender() {
 
@@ -49,7 +51,7 @@ public class FileSender {
                 ObjectOutputStream os = new ObjectOutputStream(outputStream);
                 os.writeObject(event);
                 byte[] data = outputStream.toByteArray();
-                DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 8003);
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, port);
                 socket.send(sendPacket);
                 noPacketsSend++;
                 Thread.sleep(10);
@@ -110,7 +112,24 @@ public class FileSender {
 
 
     public static void main(String[] args) {
-        FileSender client = new FileSender();
-        client.createConnection();
+        ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring-processor.xml"});
+        FileSender fileSender = (FileSender) context.getBean("fileSender");
+        fileSender.createConnection();
+    }
+
+    public void setSourceFilePath(String sourceFilePath) {
+        this.sourceFilePath = sourceFilePath;
+    }
+
+    public String getSourceFilePath() {
+        return sourceFilePath;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }
