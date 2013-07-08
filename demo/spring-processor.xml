@@ -45,9 +45,7 @@
         <constructor-arg value="8003"/>
         <property name="type" value="FILE"/>
     </bean>
-    <bean id="fileHandler" class="org.strix.mom.server.message.file.FileHandler">
-            <property name="outputLocation" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/out"/>
-    </bean>
+
     <bean id="applicationClientManager" class="org.strix.mom.server.webServer.ApplicationClientManager" factory-method="getInstance"/>
 
     <bean id="messageProcessor" class="org.strix.mom.server.message.MessageProcessor">
@@ -56,7 +54,15 @@
     </bean>
     <bean id="messageHandler" class="org.strix.mom.server.message.json.JsonMessageHandler"/>
 
+    <!-- Used in the mom server -->
+    <bean id="fileHandler" class="org.strix.mom.server.message.file.FileHandler">
+        <!-- Change the path here to where the resources recevied needed to be saved-->
+        <property name="outputLocation" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/out"/>
+    </bean>
+
+    <!-- Used in UDP Client -->
     <bean id="fileSender" class="temp.FileSender">
+        <!-- Change the path here to where the resource is located -->
         <property name="sourceFilePath" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/in/2.jpg"/>
         <property name="port" value="8003"/>
     </bean>
