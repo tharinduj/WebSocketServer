@@ -57,7 +57,7 @@
     <bean id="messageHandler" class="org.strix.mom.server.message.json.JsonMessageHandler"/>
 
     <bean id="fileSender" class="temp.FileSender">
-        <property name="sourceFilePath" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/in/1.jpg"/>
+        <property name="sourceFilePath" value="G:/Strix/MyjWebSocketJavaClient/WebSocketServer/testData/in/2.jpg"/>
         <property name="port" value="8003"/>
     </bean>
 </beans>

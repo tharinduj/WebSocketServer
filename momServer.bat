@@ -1,4 +1,4 @@
-title = MIX-TRS_v2.11.1.0
+title = MOMServer
 
 echo OFF
 
